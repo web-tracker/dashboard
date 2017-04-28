@@ -126,6 +126,7 @@ module.exports = {
         loader: 'babel',
         query: {
           plugins: [
+            "transform-decorators-legacy",
             ['import', [{ libraryName: "antd", style: 'css' }]],
           ]
         }

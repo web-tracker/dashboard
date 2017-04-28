@@ -9,16 +9,18 @@ import Metric from './container/Metric';
 import Errors from './container/Errors';
 import Monitor from './container/Monitor';
 import Setting from './container/Setting';
+import User from './model/User';
 import './index.css';
 
 const { Content, Footer, Sider } = Layout;
+const user = new User();
 
 const RouterView = () => (
   <BrowserRouter>
     <Layout>
       <Route path="/" render={props => (
         <div>
-          <Header/>
+          <Header user={user}/>
           <Route path="/home" component={Home}/>
           {/*<Route path="/dashboard" component={Dashboard}/>*/}
         </div>
