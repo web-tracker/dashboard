@@ -48,7 +48,11 @@ class HeaderView extends Component {
             </Menu>
           </Col>
           <Col span={2} push={1}>
-            <Button type="primary" onClick={this.login}>Login</Button>
+            {
+              !this.props.user.id
+              ? (<Button type="primary" onClick={this.login}>Login</Button>)
+              : (<img src={this.props.user.avatar} style={{width: '40px', borderRadius: '50%', marginTop: '12px'}}/>)
+            }
           </Col>
         </Row>
       </Header>

@@ -14,10 +14,13 @@ export default class User {
   }
 
   fetch() {
-    const url = '/user';
-    console.log(url);
+    const url = '/api/user';
     axios.get(url).then(response => {
-      console.log(response);
+      const data = response.data;
+      this.id = data.id;
+      this.username = data.username;
+      this.email = data.email;
+      this.avatar = data.avatar;
     });
   }
 }
