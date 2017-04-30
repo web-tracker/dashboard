@@ -13,13 +13,19 @@ class HeaderView extends Component {
   constructor(props) {
     super(props);
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   login() {
     location.href = config.host + '/login?redirect_url=' + location.href;
   }
 
+  logout() {
+    this.props.user.logout();
+  }
+
   render() {
+    const {user} = this.props;
     return (
       <Header className="header">
         <Row>
@@ -49,9 +55,10 @@ class HeaderView extends Component {
           </Col>
           <Col span={2} push={1}>
             {
-              !this.props.user.id
-              ? (<Button type="primary" onClick={this.login}>Login</Button>)
-              : (<img src={this.props.user.avatar} style={{width: '40px', borderRadius: '50%', marginTop: '12px'}}/>)
+              user.requested && user.id
+              ? (<img src={this.props.user.avatar} style={{width: '40px', borderRadius: '50%', marginTop: '12px'}}
+                  onClick={this.logout}/>)
+              : (<Button type="primary" onClick={this.login}>Login</Button>)
             }
           </Col>
         </Row>

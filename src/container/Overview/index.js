@@ -44,7 +44,6 @@ class Dashboard extends Component {
   _resetAreaChartWidth() {
     const width = ReactDOM.findDOMNode(this.refs.container).offsetWidth;
     const cardHeight = ReactDOM.findDOMNode(this.refs.card).offsetHeight;
-    console.log(cardHeight);
     this.setState({
       panelWidth: width - 90,
       cardWidth: width / 3,

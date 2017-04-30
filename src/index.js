@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { autorun } from 'mobx';
 import { BrowserRouter, Route, Redirect, NavLink } from 'react-router-dom'
 import { Layout, Menu } from 'antd';
 import Header from './component/Header';
@@ -15,10 +14,6 @@ import './index.css';
 
 const { Content, Footer, Sider } = Layout;
 const user = new User();
-
-autorun(() => {
-  console.log(user.username);
-});
 
 const RouterView = () => (
   <BrowserRouter>
