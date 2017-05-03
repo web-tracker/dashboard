@@ -10,53 +10,56 @@ import Errors from './container/Errors';
 import Monitor from './container/Monitor';
 import Setting from './container/Setting';
 import User from './model/User';
+import MetricModel from './model/Metric';
+import CategoryModel from './model/Category';
 import './index.css';
 
 const { Content, Footer, Sider } = Layout;
-const user = new User();
 
 const RouterView = () => (
   <BrowserRouter>
     <Layout>
       <Route path="/" render={props => (
         <div>
-          <Header user={user}/>
+          <Header user={User}/>
           <Route path="/home" component={Home}/>
           {/*<Route path="/dashboard" component={Dashboard}/>*/}
         </div>
       )}/>
-      <Route path="/dashboard" render={props => ( 
+      <Route path="/dashboard" render={props => (
         <Content style={{ padding: '0 50px' }}>
           <Layout style={{ padding: '24px 0' }}>
             <Sider width={200} style={{ background: '#fff' }}>
               <Menu
                 mode="inline"
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['1']}
                 style={{ height: '100%' }}
               >
                 <Menu.Item key="1">
                   <NavLink to="/dashboard/overview" activeClassName="ant-menu-item-selected">Overview</NavLink>
                 </Menu.Item>
                 <Menu.Item key="2">
-                  <NavLink to="/dashboard/metric" activeClassName="ant-menu-item-selected">Metric</NavLink>
+                  <NavLink to="/dashboard/metric" activeClassName="ant-menu-item-selected">Metric Charts</NavLink>
                 </Menu.Item>
                 <Menu.Item key="3">
-                  <NavLink to="/dashboard/errors" activeClassName="ant-menu-item-selected">Errors</NavLink>
+                  <NavLink to="/dashboard/errors" activeClassName="ant-menu-item-selected">Error Logs</NavLink>
                 </Menu.Item>
                 <Menu.Item key="4">
-                  <NavLink to="/dashboard/monitor" activeClassName="ant-menu-item-selected">Monitor</NavLink>
+                  <NavLink to="/dashboard/monitor" activeClassName="ant-menu-item-selected">Monitoring</NavLink>
                 </Menu.Item>
                 <Menu.Item key="5">
-                  <NavLink to="/dashboard/setting" activeClassName="ant-menu-item-selected">Setting</NavLink>
+                  <NavLink to="/dashboard/setting" activeClassName="ant-menu-item-selected">Settings</NavLink>
                 </Menu.Item>
               </Menu>
             </Sider>
             <Route exact path="/dashboard" render={() => (
               <Redirect to="/dashboard/overview"/>
             )}/>
-            <Route exact path="/dashboard/overview" component={Overview}/>
-            <Route exact path="/dashboard/metric" component={Metric}/>
+            <Route exact path="/dashboard/overview" render={() => (
+              <Overview metric={MetricModel}/>
+            )}/>
+            <Route exact path="/dashboard/metric" render={() => (
+              <Metric metric={MetricModel}/>
+            )}/>
             <Route exact path="/dashboard/errors" component={Errors}/>
             <Route exact path="/dashboard/monitor" component={Monitor}/>
             <Route exact path="/dashboard/setting" component={Setting}/>

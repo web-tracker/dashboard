@@ -3,20 +3,13 @@ import ReactDOM from 'react-dom';
 import { Layout, Card, Row, Col, Progress } from 'antd';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  RadialBarChart, RadialBar, Legend
+  PieChart, Pie, Sector, Cell, Legend
 } from 'recharts';
-import ReactResizeDetector from 'react-resize-detector';
+import {observer} from 'mobx-react';
+
+import TimeOverview from '../../component/TimeOverview';
 
 const { Content } = Layout;
-const data = [
-      {name: 'Page A', uv: 4000, pv: 2400, amt: 2400},
-      {name: 'Page B', uv: 3000, pv: 1398, amt: 2210},
-      {name: 'Page C', uv: 2000, pv: 9800, amt: 2290},
-      {name: 'Page D', uv: 2780, pv: 3908, amt: 2000},
-      {name: 'Page E', uv: 1890, pv: 4800, amt: 2181},
-      {name: 'Page F', uv: 2390, pv: 3800, amt: 2500},
-      {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
-];
 
 const data1 = [
       {name: '18-24', uv: 31.47, pv: 2400, fill: '#8884d8'},
@@ -28,10 +21,28 @@ const data1 = [
       {name: 'unknow', uv: 6.67, pv: 4800, fill: '#ffc658'}
     ];
 
+const data = [{name: 'FPT', value: 400}, {name: 'TLT', value: 300},
+              {name: 'FBT', value: 300}, {name: 'DLT', value: 200}
+];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+const RADIAN = Math.PI / 180;                    
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+ 	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x  = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy  + radius * Math.sin(-midAngle * RADIAN);
+ 
+  return (
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} 	dominantBaseline="central">
+    	{`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+@observer
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this._onResize = this._onResize.bind(this);
     this.state = {
       panelWidth: 0
     }
@@ -50,58 +61,66 @@ class Dashboard extends Component {
       cardHeight: cardHeight
     });
   }
-
-  _onResize() {
-    this._resetAreaChartWidth();
-  }
   
   render() {
+    const {metric} = this.props;
+    const ltoStatus = metric.averageLoadingTimeOverhead >= 50 ? 'exception': 'active';
+    const fptStatus = metric.averageFirstPaintTimeOverhead >= 50 ? 'exception': 'active';
     return (
       <Content style={{ padding: '24px', minHeight: 280 }} ref="container">
         <div style={{ marginTop: '-20px', padding: 0, minHeight: '300px' }}>
           <Row>
               <Col span="7" ref="card">
-                <Card title="Card title" bordered={false}>
-                  <Progress type="dashboard" width={this.state.panelWidth / 3.9} percent={75}/>
+                <Card title="Loading Time Overhead" bordered={false}>
+                  <Progress
+                    type="dashboard"
+                    width={this.state.panelWidth / 3.9}
+                    format={percent => percent + '‰'}
+                    percent={metric.averageLoadingTimeOverhead}
+                    status={ltoStatus}
+                  />
                 </Card>
               </Col>
               <Col span="8" offset="1">
-                <Card title="Card title" bordered={false}>
-                  <RadialBarChart
-                    data={data1}
-                    width={this.state.cardWidth - 50}
-                    height={this.state.cardHeight - 95}
-                    cx={(this.state.cardWidth - 50) / 2}
-                    cy={(this.state.cardHeight - 95) / 1.5}
-                    innerRadius={(this.state.cardWidth - 50) / 20}
-                    outerRadius={(this.state.cardWidth - 50) / 2}
-                    barSize={this.state.cardWidth / 30}
-                  >
-                    <RadialBar background clockWise={true} dataKey='uv'/>
-                  </RadialBarChart>
+                <Card title="Overview" bordered={false}>
+                  <PieChart width={330} height={208}>
+                    <Legend verticalAlign="bottom" align="center" margin={{left: 200}} height={10} width={250}/>
+                    <Pie
+                      data={data} 
+                      cx={this.state.cardWidth / 2 - 30} 
+                      cy={this.state.cardHeight / 2 - 20} 
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                      innerRadius={this.state.cardHeight / 2.7 - 50}
+                      outerRadius={this.state.cardHeight / 2.4}
+                      fill="#8884d8"
+                      paddingAngle={1}
+                    >
+                      {
+                        data.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]}/>)
+                      }
+                    </Pie>
+                  </PieChart>
                 </Card>
               </Col>
               <Col span="7" offset="1">
-                <Card title="Card title" bordered={false}>
-                  <Progress type="dashboard" width={this.state.panelWidth / 3.9} percent={75}/>
+                <Card title="First Paint Time Overhead" bordered={false}>
+                  <Progress
+                    type="dashboard"
+                    width={this.state.panelWidth / 3.9}
+                    format={percent => percent + '‰'}
+                    percent={metric.averageFirstPaintTimeOverhead}
+                    status={fptStatus}
+                  />
                 </Card>
               </Col>
           </Row>
           <Row style={{marginTop: '20px'}}>
-            <Card title="Card title" bordered={false}>
-              <AreaChart width={this.state.panelWidth} height={200} data={data}
-                  margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-              <XAxis dataKey="name"/>
-              <CartesianGrid strokeDasharray="3 3"/>
-              <Tooltip/>
-              <Area type='monotone' dataKey='uv' stackId="1" stroke='#8884d8' fill='#8884d8' />
-              <Area type='monotone' dataKey='pv' stackId="1" stroke='#82ca9d' fill='#82ca9d' />
-              <Area type='monotone' dataKey='amt' stackId="1" stroke='#ffc658' fill='#ffc658' />
-            </AreaChart>
+            <Card title="Time Overview" bordered={false}>
+              <TimeOverview metric={metric}/>
             </Card>
           </Row>
         </div>
-        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
       </Content>
     );
   }

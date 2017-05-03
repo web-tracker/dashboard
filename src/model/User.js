@@ -1,9 +1,7 @@
-import {observable, action} from 'mobx';
+import {observable} from 'mobx';
 import axios from 'axios';
 
-import config from '../config';
-
-export default class User {
+export default new class User {
   @observable id;
   @observable username;
   @observable email;
