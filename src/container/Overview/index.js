@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Layout, Card, Row, Col, Progress } from 'antd';
+import { Layout, Card, Row, Col, Progress, Icon } from 'antd';
 import {
   PieChart, Pie, Sector, Cell, Legend, Brush
 } from 'recharts';
 import {observer} from 'mobx-react';
-import MetricOverview from '../../component/MetricOverview';
+import TimeAreaChart from '../../component/TimeAreaChart';
 
 const { Content } = Layout;
 
 const data = [{name: 'FPT', value: 400}, {name: 'TLT', value: 300},
               {name: 'FBT', value: 300}, {name: 'DLT', value: 200}
 ];
+
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const RADIAN = Math.PI / 180;                    
@@ -52,8 +53,35 @@ class Dashboard extends Component {
   
   render() {
     const {metric} = this.props;
-    const ltoStatus = metric.averageLoadingTimeOverhead >= 50 ? 'exception': 'active';
-    const fptStatus = metric.averageFirstPaintTimeOverhead >= 50 ? 'exception': 'active';
+    const lto = {
+      percent: metric.averageLoadingTimeOverhead
+    };
+    const fpt = {
+      percent:  metric.averageFirstPaintTimeOverhead
+    };
+    if (metric.averageLoadingTimeOverhead < 0) {
+      lto.status = 'success';
+      lto.format = () => 'Perfect';
+      lto.percent = 100;
+    } else if (metric.averageLoadingTimeOverhead >= 50) {
+      lto.status = 'exception';
+      lto.format = (percent) => percent + '‰'
+    } else {
+      lto.status = 'active';
+      lto.format = (percent) => percent + '‰';
+    }
+
+    if (metric.averageFirstPaintTimeOverhead < 0) {
+      fpt.status = 'success';
+      fpt.format = () => 'Perfect';
+      fpt.percent = 100;
+    } else if (metric.averageFirstPaintTimeOverhead >= 50) {
+      fpt.status = 'exception';
+      fpt.format = (percent) => percent + '‰'
+    } else {
+      fpt.status = 'active';
+      fpt.format = (percent) => percent + '‰';
+    }
     return (
       <Content style={{ padding: '24px', minHeight: 280 }} ref="container">
         <div style={{ marginTop: '-20px', padding: 0, minHeight: '300px' }}>
@@ -63,9 +91,9 @@ class Dashboard extends Component {
                   <Progress
                     type="dashboard"
                     width={this.state.panelWidth / 3.9}
-                    format={percent => percent + '‰'}
-                    percent={metric.averageLoadingTimeOverhead}
-                    status={ltoStatus}
+                    format={lto.format}
+                    percent={lto.percent}
+                    status={lto.status}
                   />
                 </Card>
               </Col>
@@ -96,16 +124,16 @@ class Dashboard extends Component {
                   <Progress
                     type="dashboard"
                     width={this.state.panelWidth / 3.9}
-                    format={percent => percent + '‰'}
-                    percent={metric.averageFirstPaintTimeOverhead}
-                    status={fptStatus}
+                    format={fpt.format}
+                    percent={fpt.percent}
+                    status={fpt.status}
                   />
                 </Card>
               </Col>
           </Row>
           <Row style={{marginTop: '20px'}}>
             <Card title="Time Overview" bordered={false}>
-              <MetricOverview data={metric.metricTimeOverview.slice()}/>
+              <TimeAreaChart data={metric.metricTimeOverview.slice()}/>
             </Card>
           </Row>
         </div>

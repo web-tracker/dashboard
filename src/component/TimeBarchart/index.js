@@ -9,8 +9,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'
 @observer
 export default class TimeBarchart extends Component {
   render() {
-    const { metric, syncId } = this.props;
-    const data = metric.metricQueriedData.slice();
+    const { data, syncId } = this.props;
     const set = new Set();
     for (const d of data) {
       const keys = Object.keys(d);

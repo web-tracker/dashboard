@@ -7,7 +7,7 @@ import moment from 'moment';
 import {observer} from 'mobx-react';
 import TimeBarchart from '../../component/TimeBarchart';
 import SyncAreaChart from '../../component/SyncAreaChart';
-import MetricOverview from '../../component/MetricOverview';
+import TimeAreaChart from '../../component/TimeAreaChart';
 
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
@@ -46,6 +46,8 @@ export default class Metric extends Component {
 
   _dateChange = (date, dateString) => {
     this.options.dateRange = (dateString);
+    // Automatically reload
+    this._search();
   }
 
   _keyChange = (e) => {
@@ -53,6 +55,8 @@ export default class Metric extends Component {
     this.setState({
       selectedKey: e.target.value
     });
+    // Automatically reload
+    this._search();
   }
 
   _intervalChange = (e) => {
@@ -60,26 +64,40 @@ export default class Metric extends Component {
     this.setState({
       interval: e.target.value
     });
+    // Automatically reload
+    this._search();
   }
 
   _pathChange = (value) => {
-    if (value) this.options.path = btoa(value);
+    if (value) {
+      this.options.path = btoa(value);
+      // Automatically reload
+      this._search();
+    }
   }
 
   _ispChange = (value) => {
     this.options.network_isp = value;
+    // Automatically reload
+    this._search();
   }
 
   _cityChange = (value) => {
     this.options.city = value;
+    // Automatically reload
+    this._search();
   }
 
   _browserChange = (value) => {
     this.options.browser = value;
+    // Automatically reload
+    this._search();
   }
 
   _deviceChange = (value) => {
     this.options.device = value;
+    // Automatically reload
+    this._search();
   }
 
   _tabChange = (key) => {
@@ -87,18 +105,26 @@ export default class Metric extends Component {
     this.setState({
       currentTab: key
     });
-    this.options.key = key;
+
+    if (key !== 'overview') {
+      this.options.key = key;
+      // Automatically reload
+      this._search();
+    }
   }
 
   _search = () => {
-    this.props.metric.getMetricData(this.options);
+    setTimeout(() => {
+      this.props.metric.getMetricData(this.options);
+    }, 0);
   }
 
   render() {
     const {metric, category} = this.props;
     const overview = (
       <div>
-        <MetricOverview data={metric.metricTimeOverview.slice()}/>
+        <TimeAreaChart height={300} data={metric.metricTimeOverview.slice()} syncId="overview"/>
+        <TimeBarchart data={metric.metricTimeOverview.slice()} syncId="overview"/>
       </div>
     );
     const pathOptionView = category.path.slice().map(path => (
@@ -212,7 +238,7 @@ export default class Metric extends Component {
           </Col>
         </Row>
         <div style={{marginTop: '10px'}}>
-          <TimeBarchart metric={metric} syncId="metric"/>
+          <TimeBarchart data={metric.metricQueriedData.slice()} syncId="metric"/>
         </div>
         <SyncAreaChart data={metric.metricSegmentQueriedData.slice()} syncId="metric"/>
       </Row>

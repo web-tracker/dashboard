@@ -17,12 +17,13 @@ export default new class User {
   login() {
     axios.get('/api/user').then(response => {
       const data = response.data;
-      this.requested = true;
       this.id = data.id;
       this.username = data.username;
       this.email = data.email;
       this.avatar = data.avatar;
+      this.requested = true;
     }).catch(error => {
+      this.requested = true;
       console.log('Fetch user failed');
     });
   }
@@ -33,7 +34,6 @@ export default new class User {
       this.username = null;
       this.email = null;
       this.avatar = null;
-      this.requested = false;
     }).catch(error => {
       console.log('Logout failed');
     });

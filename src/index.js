@@ -22,7 +22,7 @@ const RouterView = () => (
     <Layout>
       <Route path="/" render={props => (
         <div>
-          <Header user={User}/>
+          <Header user={User} location={props.location}/>
           <Route path="/home" component={Home}/>
           {/*<Route path="/dashboard" component={Dashboard}/>*/}
         </div>

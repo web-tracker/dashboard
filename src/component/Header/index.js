@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
   NavLink
 } from 'react-router-dom'
-import { Layout, Menu, Button, Row, Col } from 'antd';
+import { Layout, Menu, Button, Row, Col, Tooltip} from 'antd';
 import { observer } from 'mobx-react';
 const { Header, Content, Footer, Sider } = Layout;
 import './index.css';
@@ -12,20 +12,18 @@ import config from '../../config';
 class HeaderView extends Component {
   constructor(props) {
     super(props);
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
   }
 
-  login() {
+  login = () => {
     location.href = config.host + '/login?redirect_url=' + location.href;
   }
 
-  logout() {
+  logout = () => {
     this.props.user.logout();
   }
 
   render() {
-    const {user} = this.props;
+    const {user, location} = this.props;
     return (
       <Header className="header">
         <Row>
@@ -37,29 +35,36 @@ class HeaderView extends Component {
             <Menu
               theme="dark"
               mode="horizontal"
-              style={{ lineHeight: '64px'}}
+              selectedKeys={[location.pathname]}
             >
-              <Menu.Item key="1">
-                <NavLink to="/home" activeClassName="selected">Home</NavLink>
+              <Menu.Item key="/home">
+                <NavLink to="/home">H ome</NavLink>
               </Menu.Item>
-              <Menu.Item key="2">
-                <NavLink to="/guide" activeClassName="selected">Guide</NavLink>
+              <Menu.Item key="/guide">
+                <NavLink to="/guide">Guide</NavLink>
               </Menu.Item>
-              <Menu.Item key="3">
-                <NavLink to="/dashboard" activeClassName="selected">Dashboard</NavLink>
+              <Menu.Item key="/dashboard">
+                <NavLink to="/dashboard">Dashboard</NavLink>
               </Menu.Item>
-              <Menu.Item key="4">
-                <NavLink to="/setting" activeClassName="selected">Setting</NavLink>
+              <Menu.Item key="/setting">
+                <NavLink to="/setting">Setting</NavLink>
               </Menu.Item>
             </Menu>
           </Col>
           <Col span={2} push={1}>
-            {
-              user.requested && user.id
-              ? (<img src={this.props.user.avatar} style={{width: '40px', borderRadius: '50%', marginTop: '12px'}}
-                  onClick={this.logout}/>)
-              : (<Button type="primary" onClick={this.login}>Login</Button>)
-            }
+            <div style={{maxHeight: '64px', overflow: 'hidden'}}>
+              {
+                !user.requested ? (<span></span>)
+                : (user.id
+                ? (<Tooltip placement="bottom" title="Logout">
+                    <img src={this.props.user.avatar}
+                      style={{width: '40px', borderRadius: '50%', marginTop: '12px'}}
+                      onClick={this.logout}
+                    />
+                  </Tooltip>)
+                : (<Button type="primary" onClick={this.login}>Login</Button>))
+              }
+            </div>
           </Col>
         </Row>
       </Header>
