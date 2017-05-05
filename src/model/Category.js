@@ -2,11 +2,11 @@ import {observable} from 'mobx';
 import axios from 'axios';
 
 export default new class Category {
-  @observable path;
-  @observable networkISP;
-  @observable city;
-  @observable browser;
-  @observable device;
+  @observable path = [];
+  @observable networkISP = [];
+  @observable city = [];
+  @observable browser = [];
+  @observable device = [];
 
   constructor() {
     this.load();
@@ -23,7 +23,12 @@ export default new class Category {
     Promise.all(apis.map(api => {
       return this.fetch(`/api/metric/${api}`);
     })).then(results => {
-      console.log(results);
+      const [path, isp, city, browser, device] = results;
+      this.path = path.data;
+      this.networkISP = isp.data;
+      this.city = city.data;
+      this.browser = browser.data;
+      this.device = device.data;
     });
   }
 

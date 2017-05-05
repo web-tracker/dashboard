@@ -2,24 +2,12 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Layout, Card, Row, Col, Progress } from 'antd';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  PieChart, Pie, Sector, Cell, Legend
+  PieChart, Pie, Sector, Cell, Legend, Brush
 } from 'recharts';
 import {observer} from 'mobx-react';
-
-import TimeOverview from '../../component/TimeOverview';
+import MetricOverview from '../../component/MetricOverview';
 
 const { Content } = Layout;
-
-const data1 = [
-      {name: '18-24', uv: 31.47, pv: 2400, fill: '#8884d8'},
-      {name: '25-29', uv: 26.69, pv: 4567, fill: '#83a6ed'},
-      {name: '30-34', uv: 15.69, pv: 1398, fill: '#8dd1e1'},
-      {name: '35-39', uv: 8.22, pv: 9800, fill: '#82ca9d'},
-      {name: '40-49', uv: 8.63, pv: 3908, fill: '#a4de6c'},
-      {name: '50+', uv: 2.63, pv: 4800, fill: '#d0ed57'},
-      {name: 'unknow', uv: 6.67, pv: 4800, fill: '#ffc658'}
-    ];
 
 const data = [{name: 'FPT', value: 400}, {name: 'TLT', value: 300},
               {name: 'FBT', value: 300}, {name: 'DLT', value: 200}
@@ -117,7 +105,7 @@ class Dashboard extends Component {
           </Row>
           <Row style={{marginTop: '20px'}}>
             <Card title="Time Overview" bordered={false}>
-              <TimeOverview metric={metric}/>
+              <MetricOverview data={metric.metricTimeOverview.slice()}/>
             </Card>
           </Row>
         </div>

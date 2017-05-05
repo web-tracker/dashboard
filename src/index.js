@@ -12,6 +12,7 @@ import Setting from './container/Setting';
 import User from './model/User';
 import MetricModel from './model/Metric';
 import CategoryModel from './model/Category';
+
 import './index.css';
 
 const { Content, Footer, Sider } = Layout;
@@ -33,21 +34,22 @@ const RouterView = () => (
               <Menu
                 mode="inline"
                 style={{ height: '100%' }}
+                selectedKeys={[props.location.pathname]}
               >
-                <Menu.Item key="1">
-                  <NavLink to="/dashboard/overview" activeClassName="ant-menu-item-selected">Overview</NavLink>
+                <Menu.Item key="/dashboard/overview">
+                  <NavLink to="/dashboard/overview">Overview</NavLink>
                 </Menu.Item>
-                <Menu.Item key="2">
-                  <NavLink to="/dashboard/metric" activeClassName="ant-menu-item-selected">Metric Charts</NavLink>
+                <Menu.Item key="/dashboard/metric">
+                  <NavLink to="/dashboard/metric">Metric Charts</NavLink>
                 </Menu.Item>
-                <Menu.Item key="3">
-                  <NavLink to="/dashboard/errors" activeClassName="ant-menu-item-selected">Error Logs</NavLink>
+                <Menu.Item key="/dashboard/errors">
+                  <NavLink to="/dashboard/errors">Error Logs</NavLink>
                 </Menu.Item>
-                <Menu.Item key="4">
-                  <NavLink to="/dashboard/monitor" activeClassName="ant-menu-item-selected">Monitoring</NavLink>
+                <Menu.Item key="/dashboard/monitor">
+                  <NavLink to="/dashboard/monitor">Monitoring</NavLink>
                 </Menu.Item>
-                <Menu.Item key="5">
-                  <NavLink to="/dashboard/setting" activeClassName="ant-menu-item-selected">Settings</NavLink>
+                <Menu.Item key="/dashboard/setting">
+                  <NavLink to="/dashboard/setting">Settings</NavLink>
                 </Menu.Item>
               </Menu>
             </Sider>
@@ -58,7 +60,7 @@ const RouterView = () => (
               <Overview metric={MetricModel}/>
             )}/>
             <Route exact path="/dashboard/metric" render={() => (
-              <Metric metric={MetricModel}/>
+              <Metric metric={MetricModel} category={CategoryModel}/>
             )}/>
             <Route exact path="/dashboard/errors" component={Errors}/>
             <Route exact path="/dashboard/monitor" component={Monitor}/>

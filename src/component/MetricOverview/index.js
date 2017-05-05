@@ -1,15 +1,12 @@
 import React, {Component} from 'react';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Brush, Legend
+  AreaChart, Area, XAxis, CartesianGrid, Tooltip, Legend, Brush
 } from 'recharts';
-import {observer} from 'mobx-react';
 
-@observer
-export default class TimeOverview extends Component {
+export default class MetricOverview extends Component {
   render() {
-    const {metric} = this.props;
     return (
-      <AreaChart width={830} height={200} data={metric.metricTimeOverview.slice()}
+      <AreaChart width={830} height={200} data={this.props.data}
           margin={{top: 10, right: 30, left: 0, bottom: 0}}>
         <XAxis dataKey="name"/>
         <CartesianGrid strokeDasharray="3 3"/>
