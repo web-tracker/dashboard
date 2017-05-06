@@ -62,7 +62,9 @@ const RouterView = () => (
             <Route exact path="/dashboard/metric" render={() => (
               <Metric metric={MetricModel} category={CategoryModel}/>
             )}/>
-            <Route exact path="/dashboard/errors" component={Errors}/>
+            <Route exact path="/dashboard/errors" render={() => (
+              <Errors category={CategoryModel}/>
+            )}/>
             <Route exact path="/dashboard/monitor" component={Monitor}/>
             <Route exact path="/dashboard/setting" component={Setting}/>
           </Layout>

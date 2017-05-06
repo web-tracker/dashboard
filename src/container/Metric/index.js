@@ -146,18 +146,15 @@ export default class Metric extends Component {
       <Row>
         <Row>
           <Col span="10">
-              <RangePicker
-                format="YYYY-MM-DD"
-                size="large"
-                defaultValue={[moment().subtract(30, 'day'), moment()]}
-                ranges={{
-                  'Within 1 day': [moment().subtract(1, 'day'), moment()],
-                  'Within 1 week': [moment().subtract(1, 'week'), moment()],
-                  'Within 1 month': [moment().subtract(1, 'month'), moment()]
-                }}
-                placeholder={['Start Date', 'End Date']}
-                onChange={this._dateChange}
-              />
+            <RangePicker format="YYYY-MM-DD" size="large" defaultValue={[moment().subtract(30, 'day'), moment()]}
+              placeholder={['Start Date', 'End Date']}
+              onChange={this._dateChange}
+              ranges={{
+                'Within 1 day': [moment().subtract(1, 'day'), moment()],
+                'Within 1 week': [moment().subtract(1, 'week'), moment()],
+                'Within 1 month': [moment().subtract(1, 'month'), moment()]
+              }}
+            />
           </Col>
           <Col span="12">
             <RadioGroup value={this.state.selectedKey} style={{marginTop: '5px'}} onChange={this._keyChange}>
@@ -170,46 +167,22 @@ export default class Metric extends Component {
         </Row>
         <Row style={{marginTop: '10px'}}>
           <Col span="4">
-            <Select
-              size='large'
-              placeholder="Network ISP"
-              style={{ width: 130 }}
-              allowClear={true}
-              onChange={this._ispChange}
-            >
+            <Select size='large' placeholder="Network ISP" style={{ width: 130 }} allowClear={true} onChange={this._ispChange}>
               {ispOptionView}
             </Select>
           </Col>
           <Col span="4">
-            <Select
-              size='large'
-              placeholder="City"
-              style={{ width: 130 }}
-              allowClear={true}
-              onChange={this._cityChange}
-            >
+            <Select size='large' placeholder="City" style={{ width: 130 }} allowClear={true} onChange={this._cityChange}>
               {cityOptionView}
             </Select>
           </Col>
           <Col span="4">
-            <Select
-              size='large'
-              placeholder="Browser"
-              style={{ width: 130 }}
-              allowClear={true}
-              onChange={this._browserChange}
-            >
+            <Select size='large' placeholder="Browser" style={{ width: 130 }} allowClear={true} onChange={this._browserChange}>
               {browserOptionView}
             </Select>
           </Col>
           <Col span="4">
-            <Select
-              size='large'
-              placeholder="Device"
-              style={{ width: 130 }}
-              allowClear={true}
-              onChange={this._deviceChange}
-            >
+            <Select size='large' placeholder="Device" style={{ width: 130 }} allowClear={true} onChange={this._deviceChange}>
               {deviceOptionView}
             </Select>
           </Col>
@@ -223,13 +196,7 @@ export default class Metric extends Component {
         </Row>
         <Row style={{marginTop: '10px'}}>
           <Col span="20">
-            <Select
-              size='large'
-              placeholder="Path"
-              style={{ width: 650 }}
-              allowClear={true}
-              onChange={this._pathChange}
-            >
+            <Select size='large' placeholder="Path" style={{ width: 650 }} allowClear={true} onChange={this._pathChange}>
               {pathOptionView}
             </Select>
           </Col>
@@ -244,7 +211,7 @@ export default class Metric extends Component {
       </Row>
     );
     return (
-      <Layout.Content style={{ marginLeft: '24px', padding: '24px', minHeight: 280, background: '#fff' }} ref="container">
+      <Layout.Content style={{ marginLeft: '24px', padding: '24px', minHeight: 280, background: '#fff' }}>
         <Row>
           <Tabs type="card" onChange={this._tabChange}>
             <TabPane tab="Overview" key="overview"></TabPane>

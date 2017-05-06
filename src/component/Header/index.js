@@ -24,6 +24,12 @@ class HeaderView extends Component {
 
   render() {
     const {user, location} = this.props;
+    console.log(location);
+    const rootpath = location.pathname.split('/');
+    if (!rootpath || rootpath.length < 2) {
+      throw new Error('Router Error');
+    }
+    const selectedMenu = '/' + rootpath[1];
     return (
       <Header className="header">
         <Row>
@@ -35,10 +41,11 @@ class HeaderView extends Component {
             <Menu
               theme="dark"
               mode="horizontal"
-              selectedKeys={[location.pathname]}
+              selectedKeys={[selectedMenu]}
+              style={{marginTop: '10px'}}
             >
               <Menu.Item key="/home">
-                <NavLink to="/home">H ome</NavLink>
+                <NavLink to="/home">Home</NavLink>
               </Menu.Item>
               <Menu.Item key="/guide">
                 <NavLink to="/guide">Guide</NavLink>
@@ -51,8 +58,7 @@ class HeaderView extends Component {
               </Menu.Item>
             </Menu>
           </Col>
-          <Col span={2} push={1}>
-            <div style={{maxHeight: '64px', overflow: 'hidden'}}>
+          <Col span={2} push={1} style={{maxHeight: '64px', overflow: 'hidden'}}>
               {
                 !user.requested ? (<span></span>)
                 : (user.id
@@ -64,7 +70,6 @@ class HeaderView extends Component {
                   </Tooltip>)
                 : (<Button type="primary" onClick={this.login}>Login</Button>))
               }
-            </div>
           </Col>
         </Row>
       </Header>
