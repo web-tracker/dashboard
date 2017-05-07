@@ -9,9 +9,12 @@ import Metric from './container/Metric';
 import Errors from './container/Errors';
 import Monitor from './container/Monitor';
 import Setting from './container/Setting';
+import ErrorDetail from './container/ErrorDetail';
 import User from './model/User';
 import MetricModel from './model/Metric';
+import ErrorModel from './model/Error';
 import CategoryModel from './model/Category';
+import ErrorCategoryModel from './model/ErrorCategory';
 
 import './index.css';
 
@@ -22,11 +25,11 @@ const RouterView = () => (
     <Layout>
       <Route path="/" render={props => (
         <div>
-          <Header user={User} location={props.location}/>
-          <Route path="/home" component={Home}/>
+          <Header user={User} location={props.location} />
+          <Route path="/home" component={Home} />
           {/*<Route path="/dashboard" component={Dashboard}/>*/}
         </div>
-      )}/>
+      )} />
       <Route path="/dashboard" render={props => (
         <Content style={{ padding: '0 50px' }}>
           <Layout style={{ padding: '24px 0' }}>
@@ -54,22 +57,23 @@ const RouterView = () => (
               </Menu>
             </Sider>
             <Route exact path="/dashboard" render={() => (
-              <Redirect to="/dashboard/overview"/>
-            )}/>
+              <Redirect to="/dashboard/overview" />
+            )} />
             <Route exact path="/dashboard/overview" render={() => (
-              <Overview metric={MetricModel}/>
-            )}/>
+              <Overview metric={MetricModel} />
+            )} />
             <Route exact path="/dashboard/metric" render={() => (
-              <Metric metric={MetricModel} category={CategoryModel}/>
-            )}/>
+              <Metric metric={MetricModel} category={CategoryModel} />
+            )} />
             <Route exact path="/dashboard/errors" render={() => (
-              <Errors category={CategoryModel}/>
-            )}/>
-            <Route exact path="/dashboard/monitor" component={Monitor}/>
-            <Route exact path="/dashboard/setting" component={Setting}/>
+              <Errors category={ErrorCategoryModel} error={ErrorModel} />
+            )} />
+            <Route exact path="/dashboard/errors/detail" component={ErrorDetail} />
+            <Route exact path="/dashboard/monitor" component={Monitor} />
+            <Route exact path="/dashboard/setting" component={Setting} />
           </Layout>
         </Content>
-      )}/>
+      )} />
       <Footer style={{ textAlign: 'center' }}>
         Web Tracker © 2017
       </Footer>

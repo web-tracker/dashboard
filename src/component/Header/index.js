@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   NavLink
 } from 'react-router-dom'
-import { Layout, Menu, Button, Row, Col, Tooltip} from 'antd';
+import { Layout, Menu, Button, Row, Col, Tooltip } from 'antd';
 import { observer } from 'mobx-react';
 const { Header, Content, Footer, Sider } = Layout;
 import './index.css';
@@ -23,8 +23,7 @@ class HeaderView extends Component {
   }
 
   render() {
-    const {user, location} = this.props;
-    console.log(location);
+    const { user, location } = this.props;
     const rootpath = location.pathname.split('/');
     if (!rootpath || rootpath.length < 2) {
       throw new Error('Router Error');
@@ -42,7 +41,7 @@ class HeaderView extends Component {
               theme="dark"
               mode="horizontal"
               selectedKeys={[selectedMenu]}
-              style={{marginTop: '10px'}}
+              style={{ marginTop: '10px' }}
             >
               <Menu.Item key="/home">
                 <NavLink to="/home">Home</NavLink>
@@ -58,18 +57,18 @@ class HeaderView extends Component {
               </Menu.Item>
             </Menu>
           </Col>
-          <Col span={2} push={1} style={{maxHeight: '64px', overflow: 'hidden'}}>
-              {
-                !user.requested ? (<span></span>)
+          <Col span={2} push={1} style={{ maxHeight: '64px', overflow: 'hidden' }}>
+            {
+              !user.requested ? (<span></span>)
                 : (user.id
-                ? (<Tooltip placement="bottom" title="Logout">
+                  ? (<Tooltip placement="bottom" title="Logout">
                     <img src={this.props.user.avatar}
-                      style={{width: '40px', borderRadius: '50%', marginTop: '12px'}}
+                      style={{ width: '40px', borderRadius: '50%', marginTop: '12px' }}
                       onClick={this.logout}
                     />
                   </Tooltip>)
-                : (<Button type="primary" onClick={this.login}>Login</Button>))
-              }
+                  : (<Button type="primary" onClick={this.login}>Login</Button>))
+            }
           </Col>
         </Row>
       </Header>

@@ -12,3 +12,8 @@ a.selected {
   width: 1200px;
   overflow: hidden;
 }
+/* first 3 rows */
+.ant-table-row:nth-child(-n+3) {
+  color: red;
+  font-weight: bold;
+}
