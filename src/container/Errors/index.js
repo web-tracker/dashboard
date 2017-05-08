@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import { Link } from 'react-router-dom'
 import {
   Layout, DatePicker, Tabs, Row, Col, Form, Radio, Select,
-  Button, Input, Icon, Table, Tooltip
+  Button, Input, Icon, Table, Tooltip, Tag
 } from 'antd';
 import { observer } from 'mobx-react';
 
@@ -10,18 +11,29 @@ const RangePicker = DatePicker.RangePicker;
 const TabPane = Tabs.TabPane;
 const RadioGroup = Radio.RadioGroup;
 
+const colorsPreset = ['#f50', '#2db7f5', '#108ee9', '#87d068'];
 const columns = [{
   title: 'Count',
   dataIndex: 'count',
+  render: (text, obj, index) => {
+    let i = 0;
+    if (index <= 2) i = 0;
+    else if (index <= 6) i = 1;
+    else if (index <= 12) i = 2;
+    else i = 3;
+    return <Tag color={colorsPreset[i]}>{text}</Tag>
+  }
 }, {
   title: 'Message',
   dataIndex: 'message',
   render: (text, errorObject) => {
     return (
       <Tooltip title="View Details" placement="bottom">
-        <a key={text} href="#" style={{ color: 'red', textDecoration: 'underline' }}>
+        <Link key={text} to={{ pathname: "/dashboard/errors/detail", state: errorObject }}
+          style={{ color: 'red', textDecoration: 'underline' }}
+        >
           {text}
-        </a>
+        </Link>
       </Tooltip>
     );
   }

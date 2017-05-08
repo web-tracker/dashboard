@@ -1,0 +1,25 @@
+.error-stack {
+  color: #ff3232;
+  background: #fff0f0;
+  border-top: 1px solid #ffd7d7;
+  border-left: 1px solid #ffd7d7;
+  border-right: 1px solid #ffd7d7;
+  border-radius: 3px;
+}
+
+.error-stack ul li {
+  padding: 5px 10px;
+  border-bottom: 1px solid #ffd7d7;
+}
+
+.error-stack ul li:nth-child(n+2) {
+  padding-left: 30px;
+}
+
+.error-stack ul li a {
+  color: #ff3232;
+}
+
+.error-stack ul li a:hover {
+  text-decoration: underline;
+}

@@ -11,11 +11,12 @@ export default new class Error {
       params: options
     }).then(resp => {
       const errors = resp.data;
-      for (const error of errors) {
+      errors.forEach((error, index) => {
         error.time = moment(error.time).format(format);
         // Used in antd table row
-        error.key = error.message;
-      }
+        error.key = error.message + error.script_url;
+        error.index = index;
+      });
       this.queryErrors = errors;
     })
   }
