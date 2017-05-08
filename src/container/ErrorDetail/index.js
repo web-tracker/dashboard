@@ -4,7 +4,7 @@ import ErrorStack from '../../component/ErrorStack';
 
 export default class ErrorDetail extends React.Component {
   render() {
-    const { state: error } = this.props.location;
+    const { state: error, errorModel } = this.props;
     return (
       <Layout.Content style={{ marginLeft: '24px', padding: '24px', minHeight: 280, background: '#fff' }}>
         <dl className="error-detail">
@@ -49,7 +49,7 @@ export default class ErrorDetail extends React.Component {
           <Row>
             <dt>Stack: </dt>
             <dd>
-              <ErrorStack stack={error.stack} />
+              <ErrorStack stack={error.stack} errorModel={errorModel} />
             </dd>
           </Row>
         </dl>

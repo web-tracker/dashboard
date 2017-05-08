@@ -23,3 +23,9 @@
 .error-stack ul li a:hover {
   text-decoration: underline;
 }
+
+.myMarker {
+  position:absolute;
+  background: #ffd7d7;
+  z-index:20
+}

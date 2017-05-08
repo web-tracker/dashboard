@@ -68,7 +68,9 @@ const RouterView = () => (
             <Route exact path="/dashboard/errors" render={() => (
               <Errors category={ErrorCategoryModel} error={ErrorModel} />
             )} />
-            <Route exact path="/dashboard/errors/detail" component={ErrorDetail} />
+            <Route exact path="/dashboard/errors/detail" render={({ location }) => (
+              <ErrorDetail errorModel={ErrorModel} state={location.state} />
+            )} />
             <Route exact path="/dashboard/monitor" component={Monitor} />
             <Route exact path="/dashboard/setting" component={Setting} />
           </Layout>

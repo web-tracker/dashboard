@@ -1,10 +1,12 @@
 import { observable } from 'mobx';
 import moment from 'moment';
 import axios from 'axios';
+import * as Prism from 'prismjs';
 
-const format = 'MM-DD HH:mm';
+const format = 'YYYY-MM-DD HH:mm';
 export default new class Error {
   @observable queryErrors = [];
+  @observable sourceCode = '';
 
   getQueryData(options) {
     axios.get('/api/error/queryErrors', {
@@ -18,6 +20,16 @@ export default new class Error {
         error.index = index;
       });
       this.queryErrors = errors;
+    });
+  }
+
+  getSourceCode(url) {
+    axios.get('/api/error/fetchSourceCode', {
+      params: { url }
+    }).then(resp => {
+      this.sourceCode = resp.data.sourceCode;
+    }).catch(() => {
+      this.sourceCode = '';
     })
   }
 }

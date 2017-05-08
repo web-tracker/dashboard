@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/prismjs": "^1.6.2",
     "antd": "^2.9.3",
     "axios": "^0.16.1",
     "babel-plugin-transform-decorators": "^6.24.1",
@@ -14,7 +15,9 @@
     "mobx": "^3.1.9",
     "mobx-react": "^4.1.8",
     "moment": "^2.18.1",
+    "prismjs": "^1.6.0",
     "react": "^15.5.4",
+    "react-ace": "^4.2.1",
     "react-addons-css-transition-group": "^15.5.2",
     "react-dom": "^15.5.4",
     "react-resize-detector": "^0.4.1",
