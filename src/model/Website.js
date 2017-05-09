@@ -4,7 +4,7 @@ import axios from 'axios';
 export default new class Website {
   @observable websites = [];
   @observable current = {};
-  @observable backup = null;
+  @observable backup = {};
 
   constructor() {
     this.getWebsites();
@@ -16,7 +16,7 @@ export default new class Website {
     current.error_alert_enabled = !!current.error_alert_enabled;
     this.current = current;
     // For rollback
-    this.backup = current;
+    this.backup = Object.assign({}, current);
   }
 
   /**
@@ -24,7 +24,12 @@ export default new class Website {
    * otherwise rollback to backup object.
    */
   updateWebsite() {
-    console.log(this.current);
+    console.log('updatwebsite:', this.current);
+    // Continue
+  }
+
+  rollback() {
+    this.current = Object.assign({}, this.backup);
   }
 
   getWebsites() {

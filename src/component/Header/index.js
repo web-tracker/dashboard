@@ -56,8 +56,8 @@ class HeaderView extends Component {
               <Menu.Item key="/dashboard">
                 <NavLink to="/dashboard">Dashboard</NavLink>
               </Menu.Item>
-              <Menu.Item key="/setting">
-                <NavLink to="/setting">Settings</NavLink>
+              <Menu.Item key="/dashboard/setting">
+                <NavLink to="/dashboard/setting">Settings</NavLink>
               </Menu.Item>
             </Menu>
           </Col>
@@ -65,6 +65,7 @@ class HeaderView extends Component {
             <Select
               style={{ width: 150 }}
               placeholder="Select a website"
+              value={website.current.hostname}
               onChange={this.selectWebsite}
             >
               {

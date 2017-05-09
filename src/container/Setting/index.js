@@ -1,11 +1,15 @@
 import React from 'react';
 import {
   Layout, Form, Input, InputNumber, Switch, Row, Col,
-  Button, Card, Modal
+  Button, Card, Modal, message
 } from 'antd';
 import { observer } from 'mobx-react';
 
 const { Content } = Layout;
+
+function isValidAlertLine(line) {
+  return line > 0 && line <= 1000;
+}
 
 @observer
 export default class Setting extends React.Component {
@@ -26,6 +30,30 @@ export default class Setting extends React.Component {
     this.setState({
       showModal: false
     });
+  }
+
+  updateWebsite = () => {
+    const { website } = this.props;
+    const {
+      name, hostname, token, metric_alert_enabled,
+      metric_alert_line, error_alert_enabled, error_alert_line
+    } = website.current;
+
+    if (!name || !hostname || !token || !metric_alert_line || !error_alert_line ||
+      isNaN(metric_alert_line) || isNaN(error_alert_line)
+    ) {
+      website.rollback();
+      message.error('Invalid input');
+      return;
+    }
+
+    if (!isValidAlertLine(metric_alert_line) || !isValidAlertLine(error_alert_line)) {
+      website.rollback();
+      message.error('Alert line should between 0 and 1000');
+      return;
+    }
+    this.props.website.updateWebsite();
+    message.success('Website infomation is updated');
   }
 
   render() {
@@ -151,7 +179,7 @@ export default class Setting extends React.Component {
             </Col>
           </Row>
           <Row style={{ textAlign: 'center' }}>
-            <Button type="default" onClick={() => website.updateWebsite()}>
+            <Button type="default" onClick={this.updateWebsite}>
               Update
             </Button>
             <Button type="danger" style={{ marginLeft: '10px' }}>
