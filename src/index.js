@@ -7,6 +7,7 @@ import Home from './container/Home';
 import Overview from './container/Overview';
 import Metric from './container/Metric';
 import Errors from './container/Errors';
+import Alert from './container/Alert';
 import Monitor from './container/Monitor';
 import Setting from './container/Setting';
 import ErrorDetail from './container/ErrorDetail';
@@ -15,6 +16,7 @@ import MetricModel from './model/Metric';
 import ErrorModel from './model/Error';
 import CategoryModel from './model/Category';
 import ErrorCategoryModel from './model/ErrorCategory';
+import WebsiteModel from './model/Website';
 
 import './index.css';
 
@@ -25,7 +27,7 @@ const RouterView = () => (
     <Layout>
       <Route path="/" render={props => (
         <div>
-          <Header user={User} location={props.location} />
+          <Header user={User} location={props.location} website={WebsiteModel} />
           <Route path="/home" component={Home} />
           {/*<Route path="/dashboard" component={Dashboard}/>*/}
         </div>
@@ -51,6 +53,9 @@ const RouterView = () => (
                 <Menu.Item key="/dashboard/monitor">
                   <NavLink to="/dashboard/monitor">Monitoring</NavLink>
                 </Menu.Item>
+                <Menu.Item key="/dashboard/alert">
+                  <NavLink to="/dashboard/alert">Alert Center</NavLink>
+                </Menu.Item>
                 <Menu.Item key="/dashboard/setting">
                   <NavLink to="/dashboard/setting">Settings</NavLink>
                 </Menu.Item>
@@ -72,7 +77,10 @@ const RouterView = () => (
               <ErrorDetail errorModel={ErrorModel} state={location.state} />
             )} />
             <Route exact path="/dashboard/monitor" component={Monitor} />
-            <Route exact path="/dashboard/setting" component={Setting} />
+            <Route exact path="/dashboard/alert" component={Alert} />
+            <Route exact path="/dashboard/setting" render={() => (
+              <Setting website={WebsiteModel} />
+            )} />
           </Layout>
         </Content>
       )} />

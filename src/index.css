@@ -38,6 +38,14 @@ dl dd {
   min-height: 35px;
 }
 
-.error-detail .ant-row:last-child dd {
-  /*border-bottom: 1px dashed #ccc;*/
+.header .ant-select-selection {
+  background: transparent;
+  border-color: #636161;
+  color: #fff;
+}
+
+button.ant-btn-danger {
+  color: #fff;
+  background: #f04134;
+  border-color: #f04134;
 }

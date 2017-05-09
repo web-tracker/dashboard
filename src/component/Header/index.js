@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import {
-  NavLink
-} from 'react-router-dom'
-import { Layout, Menu, Button, Row, Col, Tooltip } from 'antd';
+import { NavLink } from 'react-router-dom'
+import { Layout, Menu, Button, Row, Col, Tooltip, Select } from 'antd';
 import { observer } from 'mobx-react';
-const { Header, Content, Footer, Sider } = Layout;
 import './index.css';
 import config from '../../config';
+
+const Option = Select.Option;
+const { Header, Content, Footer, Sider } = Layout;
 
 @observer
 class HeaderView extends Component {
@@ -22,8 +22,12 @@ class HeaderView extends Component {
     this.props.user.logout();
   }
 
+  selectWebsite = (name) => {
+    this.props.website.selectWebsite(name);
+  }
+
   render() {
-    const { user, location } = this.props;
+    const { user, location, website } = this.props;
     const rootpath = location.pathname.split('/');
     if (!rootpath || rootpath.length < 2) {
       throw new Error('Router Error');
@@ -36,7 +40,7 @@ class HeaderView extends Component {
             <div className="logo">
             </div>
           </Col>
-          <Col span={16}>
+          <Col span={10}>
             <Menu
               theme="dark"
               mode="horizontal"
@@ -53,11 +57,24 @@ class HeaderView extends Component {
                 <NavLink to="/dashboard">Dashboard</NavLink>
               </Menu.Item>
               <Menu.Item key="/setting">
-                <NavLink to="/setting">Setting</NavLink>
+                <NavLink to="/setting">Settings</NavLink>
               </Menu.Item>
             </Menu>
           </Col>
-          <Col span={2} push={1} style={{ maxHeight: '64px', overflow: 'hidden' }}>
+          <Col span={3} push={3}>
+            <Select
+              style={{ width: 150 }}
+              placeholder="Select a website"
+              onChange={this.selectWebsite}
+            >
+              {
+                website.websites.slice().map(w => (
+                  <Option value={w.hostname} key={w.id}>{w.hostname}</Option>
+                ))
+              }
+            </Select>
+          </Col>
+          <Col span={2} push={4} style={{ maxHeight: '64px', overflow: 'hidden' }}>
             {
               !user.requested ? (<span></span>)
                 : (user.id
