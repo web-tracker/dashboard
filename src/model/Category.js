@@ -1,16 +1,18 @@
-import {observable} from 'mobx';
+import { observable, computed, autorun } from 'mobx';
 import axios from 'axios';
+import Website from './Website';
 
-export default new class Category {
+export class Category {
   @observable path = [];
   @observable networkISP = [];
   @observable city = [];
   @observable browser = [];
   @observable device = [];
-
-  constructor() {
-    this.load();
+  @computed get website() {
+    return Website.current;
   }
+
+  constructor() { }
 
   load() {
     const apis = [
@@ -33,6 +35,8 @@ export default new class Category {
   }
 
   fetch(endpoint) {
-    return axios.get(endpoint);
+    return axios.get(endpoint, { params: { hostname: this.website.hostname } });
   }
 }
+
+export default new Category();

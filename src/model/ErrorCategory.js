@@ -1,16 +1,17 @@
-import {observable} from 'mobx';
+import { observable, autorun } from 'mobx';
 import axios from 'axios';
+import Website from './Website';
 
-export default new class Category {
+export class Category {
   @observable path = [];
   @observable networkISP = [];
   @observable city = [];
   @observable browser = [];
   @observable device = [];
 
-  constructor() {
-    this.load();
-  }
+  website = null;
+
+  constructor() { }
 
   load() {
     const apis = [
@@ -33,6 +34,16 @@ export default new class Category {
   }
 
   fetch(endpoint) {
-    return axios.get(endpoint);
+    return axios.get(endpoint, { params: { hostname: this.website.hostname } });
   }
 }
+
+const category = new Category();
+export default category;
+
+autorun(() => {
+  if (Website.current.hostname) {
+    category.website = Website.current;
+    category.load();
+  }
+});

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Layout, Form, Input, InputNumber, Switch, Row, Col,
-  Button, Card, Modal, message
+  Button, Card, Modal, message, Popconfirm
 } from 'antd';
 import { observer } from 'mobx-react';
 
@@ -13,6 +13,12 @@ function isValidAlertLine(line) {
 
 @observer
 export default class Setting extends React.Component {
+  website = {
+    name: null,
+    hostname: null,
+    token: null
+  }
+
   constructor() {
     super(...arguments);
     this.state = {
@@ -52,8 +58,48 @@ export default class Setting extends React.Component {
       message.error('Alert line should between 0 and 1000');
       return;
     }
-    this.props.website.updateWebsite();
-    message.success('Website infomation is updated');
+    website.updateWebsite()
+      .then(resp => {
+        message.success(resp.data.status);
+      })
+      .catch(error => {
+        message.error('Unknown Error Occurs');
+      })
+  }
+
+  removeWebsite = () => {
+    console.log('remove this website');
+    this.props.website.removeWebsite().then(() => {
+      message.success('This website has been successfully removed');
+    }).catch(() => {
+      message.error('Cannot remove this website due to Unknown Error');
+    });
+  }
+
+  inputNewWebsiteInfo = (type, value) => {
+    this.website[type] = value;
+  }
+
+  createWebsite = () => {
+    if (!this.website.name || !this.website.hostname) {
+      message.error('Please input name and host anme');
+      return;
+    }
+    this.website = Object.assign(this.website, {
+      token: this.website.token || '',
+      metric_alert_enabled: false,
+      metric_alert_line: 0,
+      error_alert_enabled: false,
+      error_alert_line: 0
+    });
+    this.props.website.createWebsite(this.website).then(resp => {
+      message.success('Website was successfully created');
+    }).catch(error => {
+      message.error('Cannot create this website due to Unknown Error');
+    });
+    this.setState({
+      showModal: false
+    });
   }
 
   render() {
@@ -69,30 +115,33 @@ export default class Setting extends React.Component {
 
     const modal = (
       <Modal
-        width={500}
+        width={600}
         visible={this.state.showModal}
         closable={false}
         maskClosable={true}
         onCancel={this.closeModal}
+        onOk={this.createWebsite}
+        okText="Create"
+        cancelText="Cancle"
       >
         <div style={{ marginTop: '20px' }}>
           <Form.Item
             label="Name"
             {...siteFormItemLayout}
           >
-            <Input />
+            <Input onChange={e => this.inputNewWebsiteInfo('name', e.target.value)} />
           </Form.Item>
           <Form.Item
             label="Host Name"
             {...siteFormItemLayout}
           >
-            <Input />
+            <Input onChange={e => this.inputNewWebsiteInfo('hostname', e.target.value)} />
           </Form.Item>
           <Form.Item
             label="Token"
             {...siteFormItemLayout}
           >
-            <Input />
+            <Input onChange={e => this.inputNewWebsiteInfo('token', e.target.value)} />
           </Form.Item>
         </div>
       </Modal>
@@ -182,16 +231,18 @@ export default class Setting extends React.Component {
             <Button type="default" onClick={this.updateWebsite}>
               Update
             </Button>
-            <Button type="danger" style={{ marginLeft: '10px' }}>
-              Remove
-            </Button>
+            <Popconfirm title="Are you sure delete this website?" onConfirm={this.removeWebsite} okText="Yes" cancelText="No">
+              <Button type="danger" style={{ marginLeft: '10px' }}>
+                Remove
+              </Button>
+            </Popconfirm>
             <Button type="primary" style={{ marginLeft: '10px' }} onClick={this.openModal}>
               Create
             </Button>
           </Row>
           {modal}
         </Card>
-      </Content >
+      </Content>
     )
   }
 }

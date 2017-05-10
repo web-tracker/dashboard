@@ -1,16 +1,23 @@
-import { observable } from 'mobx';
+import { observable, computed, autorun } from 'mobx';
 import moment from 'moment';
 import axios from 'axios';
 import * as Prism from 'prismjs';
+import Website from './Website';
 
 const format = 'YYYY-MM-DD HH:mm';
-export default new class Error {
+class Error {
   @observable queryErrors = [];
   @observable sourceCode = '';
 
+  @computed get website() {
+    return Website.current;
+  }
+
   getQueryData(options) {
     axios.get('/api/error/queryErrors', {
-      params: options
+      params: Object.assign(options || {}, {
+        hostname: this.website.hostname
+      })
     }).then(resp => {
       const errors = resp.data;
       errors.forEach((error, index) => {
@@ -25,7 +32,7 @@ export default new class Error {
 
   getSourceCode(url) {
     axios.get('/api/error/fetchSourceCode', {
-      params: { url }
+      params: { url, hostname: this.website.hostname }
     }).then(resp => {
       this.sourceCode = resp.data.sourceCode;
     }).catch(() => {
@@ -33,3 +40,5 @@ export default new class Error {
     })
   }
 }
+
+export default new Error();

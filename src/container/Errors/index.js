@@ -5,6 +5,7 @@ import {
   Layout, DatePicker, Tabs, Row, Col, Form, Radio, Select,
   Button, Input, Icon, Table, Tooltip, Tag
 } from 'antd';
+import { autorun } from 'mobx';
 import { observer } from 'mobx-react';
 
 const RangePicker = DatePicker.RangePicker;
@@ -64,7 +65,11 @@ export default class Errors extends Component {
   };
 
   componentDidMount() {
-    this._search();
+    autorun(() => {
+      if (this.props.error.website) {
+        this._search();
+      }
+    });
   }
 
   _dateChange = (date, dateString) => {
@@ -139,6 +144,7 @@ export default class Errors extends Component {
     const deviceOptionView = category.device.slice().map(d => (
       <Select.Option key={d.device}>{d.device}</Select.Option>
     ));
+
     const selectionView = (
       <div>
         <Row>

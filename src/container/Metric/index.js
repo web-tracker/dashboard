@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Layout, Col, Row, Form, DatePicker, Radio, Select,
   Button, Tabs, Input, Icon, Table
 } from 'antd';
 import moment from 'moment';
-import {observer} from 'mobx-react';
+import { autorun } from 'mobx';
+import { observer } from 'mobx-react';
 import TimeBarchart from '../../component/TimeBarchart';
 import SyncAreaChart from '../../component/SyncAreaChart';
 import TimeAreaChart from '../../component/TimeAreaChart';
@@ -41,7 +42,12 @@ export default class Metric extends Component {
 
   componentDidMount() {
     // Load default data for overview tab
-    this._search();
+    autorun(() => {
+      if (this.props.category.website) {
+        this.props.metric._averageLoadingTimeOverhead();
+        this.props.metric._timeOverview();
+      }
+    });
   }
 
   _dateChange = (date, dateString) => {
@@ -101,7 +107,7 @@ export default class Metric extends Component {
   }
 
   _tabChange = (key) => {
-    const {metric} = this.props;
+    const { metric } = this.props;
     this.setState({
       currentTab: key
     });
@@ -120,11 +126,11 @@ export default class Metric extends Component {
   }
 
   render() {
-    const {metric, category} = this.props;
+    const { metric, category } = this.props;
     const overview = (
       <div>
-        <TimeAreaChart height={300} data={metric.metricTimeOverview.slice()} syncId="overview"/>
-        <TimeBarchart data={metric.metricTimeOverview.slice()} syncId="overview"/>
+        <TimeAreaChart height={300} data={metric.metricTimeOverview.slice()} syncId="overview" />
+        <TimeBarchart data={metric.metricTimeOverview.slice()} syncId="overview" />
       </div>
     );
     const pathOptionView = category.path.slice().map(path => (
@@ -157,7 +163,7 @@ export default class Metric extends Component {
             />
           </Col>
           <Col span="12">
-            <RadioGroup value={this.state.selectedKey} style={{marginTop: '5px'}} onChange={this._keyChange}>
+            <RadioGroup value={this.state.selectedKey} style={{ marginTop: '5px' }} onChange={this._keyChange}>
               <Radio value='network_isp'>ISP</Radio>
               <Radio value='city'>City</Radio>
               <Radio value='browser'>Browser</Radio>
@@ -165,7 +171,7 @@ export default class Metric extends Component {
             </RadioGroup>
           </Col>
         </Row>
-        <Row style={{marginTop: '10px'}}>
+        <Row style={{ marginTop: '10px' }}>
           <Col span="4">
             <Select size='large' placeholder="Network ISP" style={{ width: 130 }} allowClear={true} onChange={this._ispChange}>
               {ispOptionView}
@@ -187,14 +193,14 @@ export default class Metric extends Component {
             </Select>
           </Col>
           <Col>
-            <RadioGroup value={this.state.interval} style={{marginTop: '5px'}} onChange={this._intervalChange}>
-                <Radio value='day'>By Day</Radio>
-                <Radio value='hour'>By Hour</Radio>
-                <Radio value='minute'>By Minute</Radio>
-              </RadioGroup>
+            <RadioGroup value={this.state.interval} style={{ marginTop: '5px' }} onChange={this._intervalChange}>
+              <Radio value='day'>By Day</Radio>
+              <Radio value='hour'>By Hour</Radio>
+              <Radio value='minute'>By Minute</Radio>
+            </RadioGroup>
           </Col>
         </Row>
-        <Row style={{marginTop: '10px'}}>
+        <Row style={{ marginTop: '10px' }}>
           <Col span="20">
             <Select size='large' placeholder="Path" style={{ width: 650 }} allowClear={true} onChange={this._pathChange}>
               {pathOptionView}
@@ -204,10 +210,10 @@ export default class Metric extends Component {
             <Button type="primary" icon="search" size="large" onClick={this._search}>Search</Button>
           </Col>
         </Row>
-        <div style={{marginTop: '10px'}}>
-          <TimeBarchart data={metric.metricQueriedData.slice()} syncId="metric"/>
+        <div style={{ marginTop: '10px' }}>
+          <TimeBarchart data={metric.metricQueriedData.slice()} syncId="metric" />
         </div>
-        <SyncAreaChart data={metric.metricSegmentQueriedData.slice()} syncId="metric"/>
+        <SyncAreaChart data={metric.metricSegmentQueriedData.slice()} syncId="metric" />
       </Row>
     );
     return (
@@ -224,7 +230,7 @@ export default class Metric extends Component {
             <TabPane tab="Script" key="scripts_time"></TabPane>
             <TabPane tab="Style" key="styles_time"></TabPane>
           </Tabs>
-          { this.state.currentTab !== 'overview' ? chartView : overview}
+          {this.state.currentTab !== 'overview' ? chartView : overview}
         </Row>
       </Layout.Content>
     );

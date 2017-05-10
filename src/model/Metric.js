@@ -1,6 +1,7 @@
-import {observable} from 'mobx';
+import { observable, computed } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
+import Website from './Website';
 
 export default new class Metric {
   @observable averageLoadingTimeOverhead = 0;
@@ -9,26 +10,32 @@ export default new class Metric {
   @observable metricQueriedData = [];
   @observable metricSegmentQueriedData = [];
 
-  constructor() {
-    this._averageLoadingTimeOverhead();
-    this._averageFirstPaintTimeOverhead();
-    this._timeOverview();
+  @computed get website() {
+    return Website.current;
   }
 
+  constructor() { }
+
   _averageLoadingTimeOverhead() {
-    axios.get('/api/metric/averageLoadingTimeOverhead').then(resp => {
+    axios.get('/api/metric/averageLoadingTimeOverhead', {
+      params: { hostname: this.website.hostname }
+    }).then(resp => {
       this.averageLoadingTimeOverhead = parseFloat(resp.data['averageLoadingTimeOverhead']);
     });
   }
 
   _averageFirstPaintTimeOverhead() {
-    axios.get('/api/metric/averageFirstPaintTimeOverhead').then(resp => {
+    axios.get('/api/metric/averageFirstPaintTimeOverhead', {
+      params: { hostname: this.website.hostname }
+    }).then(resp => {
       this.averageFirstPaintTimeOverhead = parseFloat(resp.data['averageFirstPaintTimeOverhead']);
     });
   }
 
   _timeOverview() {
-    axios.get('/api/metric/historyMetricOverview/30').then(({data: overview}) => {
+    axios.get('/api/metric/historyMetricOverview/30', {
+      params: { hostname: this.website.hostname }
+    }).then(({ data: overview }) => {
       console.log('overview fetched');
       this.metricTimeOverview = overview;
     });
@@ -43,7 +50,9 @@ export default new class Metric {
     const map = new Map();
     const segMap = new Map();
     axios.get('/api/metric/queryMetric', {
-      params: options
+      params: Object.assign(options, {
+        hostname: this.website.hostname
+      })
     }).then(resp => {
       const results = resp.data;
       // Process data into the format we want
