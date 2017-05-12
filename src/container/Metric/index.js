@@ -43,7 +43,8 @@ export default class Metric extends Component {
   componentDidMount() {
     // Load default data for overview tab
     autorun(() => {
-      if (this.props.category.website) {
+      if (this.props.category.website.hostname) {
+        this.props.category.load();
         this.props.metric._averageLoadingTimeOverhead();
         this.props.metric._timeOverview();
       }

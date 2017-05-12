@@ -38,7 +38,7 @@ export default new class Website {
 
   createWebsite(website) {
     return axios.post('/api/website/createWebsite', website).then(resp => {
-      this.websites.push(resp.data);
+      this.getWebsites();
       return resp;
     });
   }
@@ -46,6 +46,9 @@ export default new class Website {
   removeWebsite() {
     return axios.delete('/api/website/removeWebsite', {
       params: { id: this.current.id }
+    }).then(resp => {
+      this.getWebsites();
+      return resp;
     });
   }
 

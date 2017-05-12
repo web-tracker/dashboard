@@ -70,7 +70,7 @@ class HeaderView extends Component {
             >
               {
                 website.websites.slice().map(w => (
-                  <Option value={w.hostname} key={w.id}>{w.hostname}</Option>
+                  <Option value={w.hostname} key={w.hostname}>{w.hostname}</Option>
                 ))
               }
             </Select>

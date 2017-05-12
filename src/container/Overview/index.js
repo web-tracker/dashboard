@@ -4,6 +4,7 @@ import { Layout, Card, Row, Col, Progress, Icon } from 'antd';
 import {
   PieChart, Pie, Sector, Cell, Legend, Brush
 } from 'recharts';
+import { autorun } from 'mobx';
 import { observer } from 'mobx-react';
 import TimeAreaChart from '../../component/TimeAreaChart';
 
@@ -39,6 +40,14 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this._resetAreaChartWidth();
+    // Load default data for overview tab
+    autorun(() => {
+      if (this.props.metric.website.hostname) {
+        this.props.metric._averageFirstPaintTimeOverhead();
+        this.props.metric._averageLoadingTimeOverhead();
+        this.props.metric._timeOverview();
+      }
+    });
   }
 
   _resetAreaChartWidth() {
@@ -59,28 +68,28 @@ class Dashboard extends Component {
     const fpt = {
       percent: metric.averageFirstPaintTimeOverhead
     };
-    if (metric.averageLoadingTimeOverhead < 0) {
+    if (metric.averageLoadingTimeOverhead <= 0) {
       lto.status = 'success';
       lto.format = () => 'Perfect';
       lto.percent = 100;
     } else if (metric.averageLoadingTimeOverhead >= 50) {
       lto.status = 'exception';
-      lto.format = (percent) => percent + '‰'
+      lto.format = (percent) => percent + '%'
     } else {
       lto.status = 'active';
-      lto.format = (percent) => percent + '‰';
+      lto.format = (percent) => percent + '%';
     }
 
-    if (metric.averageFirstPaintTimeOverhead < 0) {
+    if (metric.averageFirstPaintTimeOverhead <= 0) {
       fpt.status = 'success';
       fpt.format = () => 'Perfect';
       fpt.percent = 100;
     } else if (metric.averageFirstPaintTimeOverhead >= 50) {
       fpt.status = 'exception';
-      fpt.format = (percent) => percent + '‰'
+      fpt.format = (percent) => percent + '%'
     } else {
       fpt.status = 'active';
-      fpt.format = (percent) => percent + '‰';
+      fpt.format = (percent) => percent + '%';
     }
     return (
       <Content style={{ padding: '24px', minHeight: 280 }} ref="container">

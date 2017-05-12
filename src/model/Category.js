@@ -1,4 +1,4 @@
-import { observable, computed, autorun } from 'mobx';
+import { observable, computed } from 'mobx';
 import axios from 'axios';
 import Website from './Website';
 
@@ -8,6 +8,7 @@ export class Category {
   @observable city = [];
   @observable browser = [];
   @observable device = [];
+
   @computed get website() {
     return Website.current;
   }

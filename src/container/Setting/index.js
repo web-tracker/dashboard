@@ -8,7 +8,7 @@ import { observer } from 'mobx-react';
 const { Content } = Layout;
 
 function isValidAlertLine(line) {
-  return line > 0 && line <= 1000;
+  return line >= 0 && line <= 1000;
 }
 
 @observer
@@ -45,7 +45,7 @@ export default class Setting extends React.Component {
       metric_alert_line, error_alert_enabled, error_alert_line
     } = website.current;
 
-    if (!name || !hostname || !token || !metric_alert_line || !error_alert_line ||
+    if (!name || !hostname || !token ||
       isNaN(metric_alert_line) || isNaN(error_alert_line)
     ) {
       website.rollback();
@@ -129,25 +129,25 @@ export default class Setting extends React.Component {
             label="Name"
             {...siteFormItemLayout}
           >
-            <Input onChange={e => this.inputNewWebsiteInfo('name', e.target.value)} />
+            <Input placeholder="(Required)" onChange={e => this.inputNewWebsiteInfo('name', e.target.value)} />
           </Form.Item>
           <Form.Item
             label="Host Name"
             {...siteFormItemLayout}
           >
-            <Input onChange={e => this.inputNewWebsiteInfo('hostname', e.target.value)} />
+            <Input placeholder="(Required)" onChange={e => this.inputNewWebsiteInfo('hostname', e.target.value)} />
           </Form.Item>
           <Form.Item
             label="Token"
             {...siteFormItemLayout}
           >
-            <Input onChange={e => this.inputNewWebsiteInfo('token', e.target.value)} />
+            <Input placeholder="(Optional)" onChange={e => this.inputNewWebsiteInfo('token', e.target.value)} />
           </Form.Item>
         </div>
       </Modal>
     );
     return (
-      <Content style={{ padding: '24px', minHeight: 280, marginTop: '-20px' }} ref="container">
+      <Content style={{ padding: '24px', minHeight: 280, marginTop: '-22px' }} ref="container">
         <Card title="Website Setting" bordered={false}>
           <Form.Item
             label="Name"

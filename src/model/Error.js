@@ -1,4 +1,4 @@
-import { observable, computed, autorun } from 'mobx';
+import { observable, computed } from 'mobx';
 import moment from 'moment';
 import axios from 'axios';
 import * as Prism from 'prismjs';

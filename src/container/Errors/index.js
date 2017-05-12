@@ -66,7 +66,11 @@ export default class Errors extends Component {
 
   componentDidMount() {
     autorun(() => {
-      if (this.props.error.website) {
+      if (this.props.category.website.hostname) {
+        // Load category data from server
+        this.props.category.load();
+      }
+      if (this.props.error.website.hostname) {
         this._search();
       }
     });
@@ -128,7 +132,6 @@ export default class Errors extends Component {
 
   render() {
     const { category, error } = this.props;
-    console.log(error.queryErrors.slice());
     const pathOptionView = category.path.slice().map(path => (
       <Select.Option key={path.script_url}>{path.script_url}</Select.Option>
     ));
