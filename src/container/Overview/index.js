@@ -10,8 +10,9 @@ import TimeAreaChart from '../../component/TimeAreaChart';
 
 const { Content } = Layout;
 
-const data = [{ name: 'FPT', value: 400 }, { name: 'TLT', value: 300 },
-{ name: 'FBT', value: 300 }, { name: 'DLT', value: 200 }
+const data = [
+  { name: 'FPT', value: 400 }, { name: 'TLT', value: 300 },
+  { name: 'FBT', value: 300 }, { name: 'DLT', value: 200 }
 ];
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];

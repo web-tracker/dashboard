@@ -28,9 +28,9 @@ export default new class Website {
   updateWebsite() {
     return axios.post('/api/website/updateWebsite', this.current).then(resp => {
       this.nextState();
+      this.getWebsites();
       return resp;
     }).catch(error => {
-      console.log('error', error);
       this.rollback();
       throw error;
     });

@@ -41,11 +41,11 @@ export default class Setting extends React.Component {
   updateWebsite = () => {
     const { website } = this.props;
     const {
-      name, hostname, token, metric_alert_enabled,
+      name, hostname, metric_alert_enabled,
       metric_alert_line, error_alert_enabled, error_alert_line
     } = website.current;
 
-    if (!name || !hostname || !token ||
+    if (!name || !hostname ||
       isNaN(metric_alert_line) || isNaN(error_alert_line)
     ) {
       website.rollback();

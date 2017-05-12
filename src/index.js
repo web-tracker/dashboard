@@ -36,7 +36,7 @@ const loginStyles = {
 }
 const LoginHintView = () => (
   <div style={loginStyles}>
-    <h2 style={{ marginTop: '200px' }}>You need to login before using dashboard!</h2>
+    <h2 style={{ marginTop: '200px' }}>You need to login before using the dashboard!</h2>
   </div>
 );
 

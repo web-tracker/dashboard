@@ -15,7 +15,20 @@ export class Alert {
       params: { hostname: this.website.hostname }
     }).then(resp => {
       const data = resp.data;
-      this.rawAlertStats = data;
+      this.rawAlertStats = data.map(d => {
+        d.key = d.id;
+        d.parent = this;
+        return d;
+      }).sort((a, b) => {
+        if (!!a.resolved && !!b.resolved) {
+          return b.count - a.count;
+        }
+        if (!!a.resolved && !!!b.resolved) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
 
       const results = [];
       const d = moment(moment().format('YYYY-MM-DD') + ' 00:00');
@@ -54,6 +67,17 @@ export class Alert {
         }
         this.alertStats = results;
       }, 50);
+    });
+  }
+
+  resolveAlertAction(alertId) {
+    axios.get('/api/alert/resolveAlert', {
+      params: {
+        alertId,
+        hostname: this.website.hostname
+      }
+    }).then(resp => {
+      this.loadAlertStats();
     });
   }
 }

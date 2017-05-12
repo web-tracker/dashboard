@@ -39,13 +39,12 @@ const columns = [{
 }, {
   title: 'Action',
   dateIndex: 'action',
-  render: (text, obj, index) => {
-    let i = 0;
-    if (index <= 2) i = 0;
-    else if (index <= 6) i = 1;
-    else if (index <= 12) i = 2;
-    else i = 3;
-    return <Button type="default">Resolve</Button>
+  render: (text, item, index) => {
+    return (
+      <Button type="default" onClick={() => item.parent.resolveAlertAction(item.id)}>
+        Resolve
+      </Button>
+    );
   }
 }];
 
